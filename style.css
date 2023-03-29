@@ -1,0 +1,101 @@
+h1 {
+    position: relative;
+    bottom: -30px;
+    font: rgb(163, 151, 151);
+    font-size: 1.5rem;
+    font-family: 'Arial';
+}
+
+td {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #CCC;
+    background-color: #eeeeee;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: inset 5px 5px 10px #e6e4e4, inset -3px -3px 5px #777;
+}
+
+td.flag {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #CCC;
+    background-color: #eeeeee;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: inset 5px 5px 10px #e6e4e4, inset -3px -3px 5px #777;
+}
+
+td.clicked {
+    cursor: pointer;
+    transition-property: background-color, box-shadow;
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+    background: transparent;
+    box-shadow: none;
+}
+
+td.mineRevel {
+    cursor: pointer;
+    transition-property: background-color, box-shadow;
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+    background: transparent;
+    box-shadow: none;
+}
+
+table {
+    border: 10px solid #e6e4e4;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;    margin-bottom: 10px;
+    padding: 15px;
+    position: relative;
+    bottom: -60px;
+    margin: auto;
+}
+
+.gridHeader {
+    position: relative;
+    background-color: #e6e4e4;
+    width: 410px;
+    height: 55px;
+    bottom: -60px;
+    display: flex;
+}
+
+.displayMines {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    bottom: 10px;
+    left: 45px;
+    color: rgb(105, 101, 101);
+    font-size: 1.5rem;
+    font-family: 'Arial';
+}
+
+.smile, .sad {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    bottom: 10px;
+    left: 185px;
+}
+
+.win {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 9px;
+    left: 180px;
+}
+
+.displayStopwatch {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    bottom: 10px;
+    left: 300px;
+    color: rgb(105, 101, 101);
+    font-size: 1.5rem;
+    font-family: 'Arial';
+}
