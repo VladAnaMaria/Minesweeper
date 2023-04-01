@@ -5,6 +5,10 @@ document.querySelector('.smile').style.visibility = 'visible';
 
 let gameHasStarted = 0;
 let isGameOver = 0;
+let totalRow = 10;
+let totalColumn = 10;
+let totalCells = 100;
+let totalMines = 10;
 let counterMines = 10;
 document.getElementById('minesId').innerHTML = counterMines;
 
@@ -12,19 +16,21 @@ let allPossibleMinePosition = [];
 let frequencyMines = [];
 let minesPosition = [];
 
-for (let n = 0; n < 100; ++n) {
-    allPossibleMinePosition.push(n);
-    frequencyMines.push(0);
+function cellGrid() {
+    for (let n = 0; n < totalCells; ++n) {
+        allPossibleMinePosition.push(n);
+        frequencyMines.push(0);
+    }
 }
 
 function generateGrid() {
     const grid = document.createElement('table');
     const gridBody = document.createElement('tbody');
-    for (let i = 0; i < 10; ++i) {
+    for (let i = 0; i < totalRow; ++i) {
         let row = document.createElement('tr');
-        for (let j = 0; j < 10; ++j) {
+        for (let j = 0; j < totalColumn; ++j) {
             let cell = document.createElement('td');
-            let positionGrid = (i * 10) + j;
+            let positionGrid = (i * totalColumn) + j;
             cell.id = positionGrid;
             row.appendChild(cell);
             cell.onclick = function() { clickCell(parseInt(this.id)); };
@@ -36,32 +42,47 @@ function generateGrid() {
     document.body.appendChild(grid);
 }
 
-generateGrid();
-
 //random mines
-for (let i = 0; i < 10; ++i) {
-    let mineIndex = Math.floor(Math.random() * allPossibleMinePosition.length);
-    let minePosition = allPossibleMinePosition[mineIndex];
-    minesPosition.push(minePosition);
-    allPossibleMinePosition.splice(mineIndex, 1);
-    frequencyMines[minePosition] = -1;
+function randomMines() {
+    for (let i = 0; i < totalMines; ++i) {
+        let mineIndex = Math.floor(Math.random() * allPossibleMinePosition.length);
+        let minePosition = allPossibleMinePosition[mineIndex];
+        minesPosition.push(minePosition);
+        allPossibleMinePosition.splice(mineIndex, 1);
+        frequencyMines[minePosition] = -1;
+    }
 }
 
 //fill around mines
-for (let i = 0; i < 10; ++i){
-    fillOrCheckNeighbours(minesPosition[i], true);
+function fillAroundMines() {
+    for (let i = 0; i < totalMines; ++i){
+        fillOrCheckNeighbours(minesPosition[i], true);
+    }
 }
 
+function main() {
+    cellGrid();
+    generateGrid();
+    randomMines();
+    fillAroundMines();
+}
+
+main();
+
+//neighbours
+let relativePosition = 10;
+let southSide = 90;
+
 function fillOrCheckNeighbours(cellPosition, fill) {
-    let northWest = cellPosition - 11;
-    let north = cellPosition - 10;
-    let northEst = cellPosition - 9;
-    let west = cellPosition - 1;
+    let northWest = parseInt(cellPosition) - relativePosition - 1;
+    let north = parseInt(cellPosition) - relativePosition;
+    let northEst = parseInt(cellPosition) - relativePosition + 1;
+    let west = parseInt(cellPosition) - 1;
     let est = parseInt(cellPosition) + 1;
-    let southWest = parseInt(cellPosition) + 9;
-    let south = parseInt(cellPosition) + 10;
-    let southEst = parseInt(cellPosition) + 11;
-    if (cellPosition > 10 && cellPosition % 10 != 0 && frequencyMines[northWest] != -1 && document.getElementById(northWest).className != 'flag') {
+    let southWest = parseInt(cellPosition) + relativePosition - 1;
+    let south = parseInt(cellPosition) + relativePosition;
+    let southEst = parseInt(cellPosition) + relativePosition + 1;
+    if (cellPosition > relativePosition && cellPosition % relativePosition != 0 && frequencyMines[northWest] != -1 && document.getElementById(northWest).className != 'flag') {
         if (fill) {
             frequencyMines[northWest] += 1;
         } else {
@@ -72,7 +93,7 @@ function fillOrCheckNeighbours(cellPosition, fill) {
             document.getElementById(northWest).className = 'clicked';
         }
     }
-    if (cellPosition > 10 && frequencyMines[north] != -1 && document.getElementById(north).className != 'flag') {
+    if (cellPosition > relativePosition && frequencyMines[north] != -1 && document.getElementById(north).className != 'flag') {
         if (fill) {
             frequencyMines[north] += 1;
         } else {
@@ -83,7 +104,7 @@ function fillOrCheckNeighbours(cellPosition, fill) {
             document.getElementById(north).className = 'clicked';
         }
     }
-    if (cellPosition > 10 && cellPosition % 10 != 9 && frequencyMines[northEst] != -1 && document.getElementById(northEst).className != 'flag') {
+    if (cellPosition > relativePosition && cellPosition % relativePosition != relativePosition - 1 && frequencyMines[northEst] != -1 && document.getElementById(northEst).className != 'flag') {
         if (fill) {
             frequencyMines[northEst] += 1;
         } else {
@@ -94,7 +115,7 @@ function fillOrCheckNeighbours(cellPosition, fill) {
             document.getElementById(northEst).className = 'clicked';
         }
     }
-    if (cellPosition % 10 != 0 && frequencyMines[west] != -1 && document.getElementById(west).className != 'flag') {
+    if (cellPosition % relativePosition != 0 && frequencyMines[west] != -1 && document.getElementById(west).className != 'flag') {
         if (fill) {
             frequencyMines[west] += 1;
         } else {
@@ -105,7 +126,7 @@ function fillOrCheckNeighbours(cellPosition, fill) {
             document.getElementById(west).className = 'clicked';
         }
     }
-    if (cellPosition % 10 != 9 && frequencyMines[est] != -1 && document.getElementById(est).className != 'flag') {
+    if (cellPosition % relativePosition != relativePosition - 1 && frequencyMines[est] != -1 && document.getElementById(est).className != 'flag') {
         if (fill) {
             frequencyMines[est] += 1;
         } else {
@@ -116,7 +137,7 @@ function fillOrCheckNeighbours(cellPosition, fill) {
             document.getElementById(est).className = 'clicked';
         }
     }
-    if (cellPosition < 90 && cellPosition % 10 != 0 && frequencyMines[southWest] != -1 && document.getElementById(southWest).className != 'flag') {
+    if (cellPosition < southSide && cellPosition % relativePosition != 0 && frequencyMines[southWest] != -1 && document.getElementById(southWest).className != 'flag') {
         if (fill) {
             frequencyMines[southWest] += 1;  
         } else {
@@ -127,7 +148,7 @@ function fillOrCheckNeighbours(cellPosition, fill) {
             document.getElementById(southWest).className = 'clicked';
         }  
     }
-    if (cellPosition < 90 && frequencyMines[south] != -1 && document.getElementById(south).className != 'flag') {
+    if (cellPosition < southSide && frequencyMines[south] != -1 && document.getElementById(south).className != 'flag') {
         if (fill) {
             frequencyMines[south] += 1;
         } else {
@@ -138,7 +159,7 @@ function fillOrCheckNeighbours(cellPosition, fill) {
             document.getElementById(south).className = 'clicked';
         }
     }
-    if (cellPosition < 90 && cellPosition % 10 != 9 && frequencyMines[southEst] != -1 && document.getElementById(southEst).className != 'flag') {
+    if (cellPosition < southSide && cellPosition % relativePosition != relativePosition - 1 && frequencyMines[southEst] != -1 && document.getElementById(southEst).className != 'flag') {
         if (fill) {
             frequencyMines[southEst] += 1; 
         } else {
@@ -204,7 +225,7 @@ function setFlag(cellId) {
                         }
                     }
                 }
-                if (ok == 10) {
+                if (ok == totalMines) {
                     gameOverWin();
                     return;
                 }
